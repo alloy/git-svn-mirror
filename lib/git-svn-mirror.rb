@@ -16,11 +16,17 @@ class GitSVNMirror
     sh "git remote add origin #{@to}"
   end
 
+  def update(alias_master_to_trunk = false)
+    sh "git svn fetch"
+    sh "git push origin 'refs/remotes/*:refs/heads/*'"
+    sh "git push origin 'refs/remotes/trunk:refs/heads/master'" if alias_master_to_trunk
+  end
+
   def svn_repo_name
     File.basename(@from)
   end
 
   def sh(command)
-    Dir.chdir(@workbench) { system("env GIT_DIR='#{@workbench}' #{command}") }
+    Dir.chdir(@workbench) { system("env GIT_DIR='#{@workbench}' #{command} > /dev/null 2>&1") }
   end
 end

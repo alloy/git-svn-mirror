@@ -1,0 +1,50 @@
+id: 3-1.0-5.r5/0
+type: dir
+pred: 3-1.0.r2/265
+count: 2
+text: 2 213 39 39 dcd728934240c7f7d5008fb46b91b982
+cpath: /branches/first-commit
+copyfrom: 2 /trunk
+
+PLAIN
+K 12
+first-commit
+V 16
+dir 3-1.0-5.r5/0
+END
+ENDREP
+id: 0-1.0.r5/213
+type: dir
+pred: 0-1.0.r1/63
+count: 1
+text: 5 156 44 44 6737e6afc5a999cf0a532398faef5021
+cpath: /branches
+copyroot: 0 /
+
+PLAIN
+K 8
+branches
+V 16
+dir 0-1.0.r5/213
+K 4
+tags
+V 16
+dir 2-1.0.r4/211
+K 5
+trunk
+V 16
+dir 3-1.0.r3/302
+END
+ENDREP
+id: 0.0.r5/465
+type: dir
+pred: 0.0.r4/459
+count: 5
+text: 5 350 102 102 916db02d3fdbd8c51c1a6bc6f66e548a
+cpath: /
+copyroot: 0 /
+
+3-1._0.t4-4 add-dir false false /branches/first-commit
+2 /trunk
+
+465 593
