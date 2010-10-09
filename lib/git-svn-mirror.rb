@@ -15,11 +15,20 @@ class GitSVNMirror
     sh "git svn init --stdlayout --prefix=svn/ #{@from}"
     sh "git remote add origin #{@to}"
 
-    update
+    fetch
+    sh "git gc"
   end
 
   def update
+    fetch
+    push
+  end
+
+  def fetch
     sh "git svn fetch"
+  end
+
+  def push
     sh "git push origin 'refs/remotes/svn/*:refs/heads/*'"
   end
 

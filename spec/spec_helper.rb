@@ -16,14 +16,14 @@ def clean!
   Dir.chdir(GIT_REPO) { system "git init > /dev/null 2>&1" }
 end
 
-def sh_in_git_repo(command)
+def sh(dir, command)
   result = ""
-  Dir.chdir(GIT_REPO) { result = `#{command}` }
+  Dir.chdir(dir) { result = `#{command}` }
   result
 end
 
 def checkout(branch)
-  sh_in_git_repo "git checkout #{branch} > /dev/null 2>&1"
+  sh GIT_REPO, "git checkout #{branch} > /dev/null 2>&1"
 end
 
 def entries

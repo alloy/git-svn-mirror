@@ -43,9 +43,14 @@ describe "GitSVNMirror" do
       config.should == EXPECTED_CONFIG
     end
 
-    it "performs an update afterwards" do
+    it "performs a fetch afterwards, but does not push yet" do
+      branches = sh(WORKBENCH_REPO, 'git branch -a')
+      branches.should.include "remotes/svn/trunk"
+      branches.should.include "remotes/svn/first-commit"
+      branches.should.include "remotes/svn/tags/second-commit"
+
       checkout "trunk"
-      Dir.entries(GIT_REPO).size.should > 3 # [".", "..", ".git"]
+      entries.should.be.empty
     end
   end
 
@@ -67,7 +72,7 @@ describe "GitSVNMirror" do
 
     it "makes sure that after pushing multiple times, it does not include duplicate origin branches" do
       @mirror.update
-      sh_in_git_repo("git branch -a").should.not.include "origin"
+      sh(GIT_REPO, "git branch -a").should.not.include "origin"
     end
   end
 end
