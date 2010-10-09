@@ -1,0 +1,2 @@
+class GitSVNMirror
+end
