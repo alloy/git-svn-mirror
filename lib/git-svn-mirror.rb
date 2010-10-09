@@ -20,6 +20,7 @@ class GitSVNMirror
     sh "git svn fetch"
     sh "git push origin 'refs/remotes/*:refs/heads/*'"
     sh "git push origin 'refs/remotes/trunk:refs/heads/master'" if alias_master_to_trunk
+    sh "rm -rf refs/remotes/origin"
   end
 
   def svn_repo_name

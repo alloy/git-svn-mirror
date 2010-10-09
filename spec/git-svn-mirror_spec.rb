@@ -78,5 +78,9 @@ describe "GitSVNMirror" do
       checkout "master"
       entries.should == %w{ file.txt file2.txt }
     end
+
+    it "makes sure that after pushing to origin there is no list of origin branches, otherwise those would also be pushed next time" do
+      File.should.not.exist File.join(WORKBENCH_REPO, 'refs/remotes/origin')
+    end
   end
 end
