@@ -12,15 +12,14 @@ class GitSVNMirror
     @workbench = argv.shift
 
     sh "git init --bare"
-    sh "git svn init --stdlayout #{@from}"
+    sh "git svn init --stdlayout --prefix=svn/ #{@from}"
     sh "git remote add origin #{@to}"
   end
 
   def update(alias_master_to_trunk = false)
     sh "git svn fetch"
-    sh "git push origin 'refs/remotes/*:refs/heads/*'"
-    sh "git push origin 'refs/remotes/trunk:refs/heads/master'" if alias_master_to_trunk
-    sh "rm -rf refs/remotes/origin"
+    sh "git push origin 'refs/remotes/svn/*:refs/heads/*'"
+    sh "git push origin 'refs/remotes/svn/trunk:refs/heads/master'" if alias_master_to_trunk
   end
 
   def svn_repo_name

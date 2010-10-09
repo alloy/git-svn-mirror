@@ -9,9 +9,9 @@ EXPECTED_CONFIG = <<EOS
 	autocrlf = false
 [svn-remote "svn"]
 	url = file://#{SVN_REPO}
-	fetch = trunk:refs/remotes/trunk
-	branches = branches/*:refs/remotes/*
-	tags = tags/*:refs/remotes/tags/*
+	fetch = trunk:refs/remotes/svn/trunk
+	branches = branches/*:refs/remotes/svn/*
+	tags = tags/*:refs/remotes/svn/tags/*
 [remote "origin"]
 	url = #{GIT_REPO}
 	fetch = +refs/heads/*:refs/remotes/origin/*
@@ -49,8 +49,14 @@ describe "GitSVNMirror" do
       @mirror.update
     end
 
+    def sh(command)
+      result = ""
+      Dir.chdir(GIT_REPO) { result = `#{command}` }
+      result
+    end
+
     def checkout(branch)
-      Dir.chdir(GIT_REPO) { system "git checkout #{branch} > /dev/null 2>&1" }
+      sh "git checkout #{branch} > /dev/null 2>&1"
     end
 
     def entries
@@ -79,8 +85,9 @@ describe "GitSVNMirror" do
       entries.should == %w{ file.txt file2.txt }
     end
 
-    it "makes sure that after pushing to origin there is no list of origin branches, otherwise those would also be pushed next time" do
-      File.should.not.exist File.join(WORKBENCH_REPO, 'refs/remotes/origin')
+    it "makes sure that after pushing multiple times, it does not include duplicate origin branches" do
+      @mirror.update
+      sh("git branch -a").should.not.include "origin"
     end
   end
 end
