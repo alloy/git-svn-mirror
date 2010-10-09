@@ -42,30 +42,16 @@ describe "GitSVNMirror" do
       config = File.read(File.join(WORKBENCH_REPO, 'config'))
       config.should == EXPECTED_CONFIG
     end
+
+    it "performs an update afterwards" do
+      checkout "trunk"
+      Dir.entries(GIT_REPO).size.should > 3 # [".", "..", ".git"]
+    end
   end
 
   describe "concerning `update'" do
     before do
       @mirror.update
-    end
-
-    def sh(command)
-      result = ""
-      Dir.chdir(GIT_REPO) { result = `#{command}` }
-      result
-    end
-
-    def checkout(branch)
-      sh "git checkout #{branch} > /dev/null 2>&1"
-    end
-
-    def entries
-      Dir.entries(GIT_REPO).reject { |x| x[0,1] == '.' }
-    end
-
-    it "does not by default alias master to trunk" do
-      checkout "master"
-      entries.should.be.empty
     end
 
     it "syncs the SVN repo to the GIT repo" do
@@ -79,15 +65,9 @@ describe "GitSVNMirror" do
       entries.should == %w{ file.txt }
     end
 
-    it "optionally aliases master to trunk" do
-      @mirror.update(true)
-      checkout "master"
-      entries.should == %w{ file.txt file2.txt }
-    end
-
     it "makes sure that after pushing multiple times, it does not include duplicate origin branches" do
       @mirror.update
-      sh("git branch -a").should.not.include "origin"
+      sh_in_git_repo("git branch -a").should.not.include "origin"
     end
   end
 end
