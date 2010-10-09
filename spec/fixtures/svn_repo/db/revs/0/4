@@ -1,0 +1,50 @@
+id: 3-1.0-4.r4/0
+type: dir
+pred: 3-1.0.r3/302
+count: 3
+text: 3 214 75 75 b74ddb1b4a102dd7f2912ff0df320b07
+cpath: /tags/second-commit
+copyfrom: 3 /trunk
+
+PLAIN
+K 13
+second-commit
+V 16
+dir 3-1.0-4.r4/0
+END
+ENDREP
+id: 2-1.0.r4/211
+type: dir
+pred: 2-1.0.r1/130
+count: 1
+text: 4 153 45 45 09b88424848d79be0e128a53913b36ec
+cpath: /tags
+copyroot: 0 /
+
+PLAIN
+K 8
+branches
+V 15
+dir 0-1.0.r1/63
+K 4
+tags
+V 16
+dir 2-1.0.r4/211
+K 5
+trunk
+V 16
+dir 3-1.0.r3/302
+END
+ENDREP
+id: 0.0.r4/459
+type: dir
+pred: 0.0.r3/551
+count: 4
+text: 4 345 101 101 f0b8b9a76b4aef905a8988036f316306
+cpath: /
+copyroot: 0 /
+
+3-1._0.t3-3 add-dir false false /tags/second-commit
+3 /trunk
+
+459 587
