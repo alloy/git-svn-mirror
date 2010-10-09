@@ -17,7 +17,7 @@ describe "GitSVNMirror, concerning `init'" do
     @mirror.svn_repo_name.should == File.basename(SVN_REPO)
   end
 
-  it "creates the GIT config" do
+  it "initializes the workbench repo" do
     config = File.read(File.join(WORKBENCH_REPO, 'config'))
     config.should == <<EOS
 [core]
@@ -27,10 +27,10 @@ describe "GitSVNMirror, concerning `init'" do
 	ignorecase = true
 	autocrlf = false
 [svn-remote "svn"]
-	url = #{SVN_REPO}
-	fetch = #{@mirror.svn_repo_name}/trunk:refs/remotes/trunk
-	branches = #{@mirror.svn_repo_name}/branches/*:refs/remotes/*
-	tags = #{@mirror.svn_repo_name}/tags/*:refs/remotes/tags/*
+	url = file://#{SVN_REPO}
+	fetch = trunk:refs/remotes/trunk
+	branches = branches/*:refs/remotes/*
+	tags = tags/*:refs/remotes/tags/*
 [remote "origin"]
 	url = #{GIT_REPO}
 	fetch = +refs/heads/*:refs/remotes/origin/*
