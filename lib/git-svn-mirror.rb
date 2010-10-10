@@ -51,7 +51,7 @@ class GitSVNMirror
     sh "git init --bare"
 
     sh "git svn init --stdlayout --prefix=svn/ #{from}"
-    sh "git config --add svn-remote.svn.authorsfile '#{authors_file}'" if authors_file
+    sh "git config --add svn.authorsfile '#{authors_file}'" if authors_file
 
     sh "git remote add origin #{to}"
     sh "git config --add remote.origin.push 'refs/remotes/svn/*:refs/heads/*'"
@@ -86,6 +86,10 @@ class GitSVNMirror
 
   def workbench=(path)
     @workbench = File.expand_path(path)
+  end
+
+  def authors_file=(path)
+    @authors_file = File.expand_path(path)
   end
 
   def log(str)

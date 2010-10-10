@@ -36,8 +36,16 @@ def config(key)
   sh WORKBENCH_REPO, "git config --get #{key}"
 end
 
-TMP = File.expand_path('../tmp', __FILE__)
+def author_and_email
+  sh(GIT_REPO, "git log -n 1 --format=format:'%an <%ae>'")
+end
 
-WORKBENCH_REPO = File.expand_path('../tmp/workbench_repo', __FILE__)
-SVN_REPO = File.expand_path('../fixtures/svn_repo', __FILE__)
-GIT_REPO = File.expand_path('../tmp/git_repo', __FILE__)
+SPEC_ROOT = File.expand_path('..', __FILE__)
+FIXTURES  = File.join(SPEC_ROOT, 'fixtures')
+TMP       = File.join(SPEC_ROOT, 'tmp')
+
+WORKBENCH_REPO = File.join(TMP, 'workbench_repo')
+SVN_REPO       = File.join(FIXTURES, 'svn_repo')
+GIT_REPO       = File.join(TMP, 'git_repo')
+
+AUTHORS_FILE   = File.join(FIXTURES, 'authors.txt')

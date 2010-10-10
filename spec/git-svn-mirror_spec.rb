@@ -1,10 +1,17 @@
 require File.expand_path("../spec_helper", __FILE__)
 
+relative_path = WORKBENCH_REPO[Dir.pwd.size+1..-1]
+INIT_ARGS_WITHOUT_AUTHORS = %W{ init --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{relative_path} }
+
+relative_path = AUTHORS_FILE[Dir.pwd.size+1..-1]
+INIT_ARGS_WITH_AUTHORS = INIT_ARGS_WITHOUT_AUTHORS.dup
+INIT_ARGS_WITH_AUTHORS << "--authors-file=#{relative_path}"
+
 describe "GitSVNMirror" do
   before do
     unless @mirror
       clean!
-      @mirror = GitSVNMirror.run(%W{ init --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{WORKBENCH_REPO} })
+      @mirror = GitSVNMirror.run(INIT_ARGS_WITHOUT_AUTHORS.dup)
     end
   end
 
@@ -20,10 +27,10 @@ describe "GitSVNMirror" do
     end
 
     it "adds an authors file config entry if one is given" do
-      config("svn-remote.svn.authorsfile").should.be.empty
+      config("svn.authorsfile").should.be.empty
       clean!
-      GitSVNMirror.run(%W{ init --authors-file='authors.txt' --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{WORKBENCH_REPO} })
-      config("svn-remote.svn.authorsfile").should == "authors.txt"
+      GitSVNMirror.run(INIT_ARGS_WITH_AUTHORS.dup)
+      config("svn.authorsfile").should == File.expand_path("spec/fixtures/authors.txt")
     end
 
     it "configures the SVN remote to fetch trunk, branches, and tags" do
@@ -58,6 +65,16 @@ describe "GitSVNMirror" do
       @mirror.from.should == "file://#{SVN_REPO}"
       @mirror.to.should == GIT_REPO
       @mirror.workbench.should == WORKBENCH_REPO
+    end
+
+    it "updates the authors from the optional authors file" do
+      checkout("trunk")
+      author_and_email.should.not == 'Eloy Duran <eloy.de.enige@gmail.com>'
+      clean!
+      GitSVNMirror.run(INIT_ARGS_WITH_AUTHORS.dup)
+      @mirror.update
+      checkout("trunk")
+      author_and_email.should == 'Eloy Duran <eloy.de.enige@gmail.com>'
     end
 
     it "syncs the SVN repo to the GIT repo" do
