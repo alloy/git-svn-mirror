@@ -22,8 +22,10 @@ Gem::Specification.new do |s|
   s.files = [
     "LICENSE",
      "README.md",
+     "Rakefile",
      "TODO",
      "bin/git-svn-mirror",
+     "git-svn-mirror.gemspec",
      "lib/git-svn-mirror.rb"
   ]
   s.homepage = %q{http://github.com/alloy/git-svn-mirror}

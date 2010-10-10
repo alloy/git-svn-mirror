@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'git-svn-mirror'
 
 _, success = GitSVNMirror.run(ARGV)

@@ -16,7 +16,7 @@ begin
     s.email = "eloy.de.enige@gmail.com"
     s.homepage = "http://github.com/alloy/git-svn-mirror"
     s.authors = ["Eloy Duran"]
-    s.files.reject! { |file| file =~ /^(\.gitignore|spec)/ }
+    s.files.reject! { |file| file =~ /^(\.gitignore|Rakefile|spec)/ }
     s.test_files = []
   end
 rescue LoadError
