@@ -51,7 +51,13 @@ describe "GitSVNMirror" do
 
   describe "concerning `update'" do
     before do
-      GitSVNMirror.run(%W{ update #{WORKBENCH_REPO} })
+      @mirror = GitSVNMirror.run(%W{ update #{WORKBENCH_REPO} })
+    end
+
+    it "returns the configuration" do
+      @mirror.from.should == "file://#{SVN_REPO}"
+      @mirror.to.should == GIT_REPO
+      @mirror.workbench.should == WORKBENCH_REPO
     end
 
     it "syncs the SVN repo to the GIT repo" do

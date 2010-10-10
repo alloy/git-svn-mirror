@@ -1,9 +1,10 @@
 
 class GitSVNMirror
-  attr_accessor :from, :to, :workbench, :authors_file
+  attr_accessor :from, :to, :workbench, :authors_file, :silent
 
   def self.run(argv)
     mirror = new
+    mirror.silent = true # TODO: must be option
     case argv.shift
     when 'init'   then init(mirror, argv)
     when 'update' then update(mirror, argv)
@@ -46,6 +47,7 @@ class GitSVNMirror
   end
 
   def init
+    log "* Creating mirror workbench at `#{@workbench}'"
     sh "git init --bare"
 
     sh "git svn init --stdlayout --prefix=svn/ #{@from}"
@@ -55,6 +57,7 @@ class GitSVNMirror
     sh "git config --add remote.origin.push 'refs/remotes/svn/*:refs/heads/*'"
 
     fetch
+    log "* Running garbage collection"
     sh "git gc"
   end
 
@@ -64,14 +67,32 @@ class GitSVNMirror
   end
 
   def fetch
+    log "* Fetching from SVN repo at `#{from}'"
     sh "git svn fetch"
   end
 
   def push
+    log "* Pushing to GIT repo at `#{to}'"
     sh "git push origin"
   end
 
-  def sh(command)
-    Dir.chdir(@workbench) { system("env GIT_DIR='#{@workbench}' #{command} > /dev/null 2>&1") }
+  def from
+    @from ||= config("svn-remote.svn.url")
+  end
+
+  def to
+    @to ||= config("remote.origin.url")
+  end
+
+  def log(str)
+    puts(str) unless @silent
+  end
+
+  def config(key)
+    sh("git config --get #{key}", false)
+  end
+
+  def sh(command, silent = true)
+    Dir.chdir(@workbench) { `env GIT_DIR='#{@workbench}' #{command}#{ ' > /dev/null 2>&1' if silent }`.strip }
   end
 end
