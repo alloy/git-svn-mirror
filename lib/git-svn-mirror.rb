@@ -1,17 +1,29 @@
 require "optparse"
 
 class GitSVNMirror
-  attr_reader :from, :to, :workbench
+  attr_accessor :from, :to, :workbench, :authors_file
 
-  def init(argv)
-    OptionParser.new do |opt|
-      opt.on('--from URI', 'The location of the SVN repository that is to be mirrored.') { |uri| @from = uri }
-      opt.on('--to URI',   'The location of the GIT repository that is the mirror.')     { |uri| @to = uri }
-      opt.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT’s format') { |af| @authors_file = af }
-    end.parse!(argv)
+  def self.run(argv)
+    mirror = new
+    case argv.shift
+    when 'init'
+      OptionParser.new do |opt|
+        opt.on('--from URI', 'The location of the SVN repository that is to be mirrored.') { |uri| mirror.from = uri }
+        opt.on('--to URI',   'The location of the GIT repository that is the mirror.') { |uri| mirror.to = uri }
+        opt.on('--workbench PATH', 'The location of the workbench repository from where the mirroring will occur') { |wb| mirror.workbench = wb }
+        opt.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT’s format') { |af| mirror.authors_file = af }
+      end.parse!(argv)
+      mirror.init
+    when 'update'
+      argv.each do |workbench|
+        mirror.workbench = workbench
+        mirror.update
+      end
+    end
+    mirror
+  end
 
-    @workbench = argv.shift
-
+  def init
     sh "git init --bare"
     sh "git svn init --stdlayout --prefix=svn/ #{@from}"
     sh "git config --add svn-remote.svn.authorsfile '#{@authors_file}'" if @authors_file

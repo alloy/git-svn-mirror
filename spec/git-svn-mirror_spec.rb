@@ -4,8 +4,7 @@ describe "GitSVNMirror" do
   before do
     unless @mirror
       clean!
-      @mirror = GitSVNMirror.new
-      @mirror.init(%W{ --from=file://#{SVN_REPO} --to=#{GIT_REPO} #{WORKBENCH_REPO} })
+      @mirror = GitSVNMirror.run(%W{ init --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{WORKBENCH_REPO} })
     end
   end
 
@@ -23,7 +22,7 @@ describe "GitSVNMirror" do
     it "adds an authors file config entry if one is given" do
       config("svn-remote.svn.authorsfile").should.be.empty
       clean!
-      @mirror.init(%W{ --authors-file='authors.txt' --from=file://#{SVN_REPO} --to=#{GIT_REPO} #{WORKBENCH_REPO} })
+      GitSVNMirror.run(%W{ init --authors-file='authors.txt' --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{WORKBENCH_REPO} })
       config("svn-remote.svn.authorsfile").should == "authors.txt"
     end
 
@@ -52,7 +51,7 @@ describe "GitSVNMirror" do
 
   describe "concerning `update'" do
     before do
-      @mirror.update
+      GitSVNMirror.run(%W{ update #{WORKBENCH_REPO} })
     end
 
     it "syncs the SVN repo to the GIT repo" do
