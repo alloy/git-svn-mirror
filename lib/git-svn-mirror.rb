@@ -1,6 +1,8 @@
 require 'optparse'
 
 class GitSVNMirror
+  VERSION = "0.1"
+
   attr_accessor :from, :to, :workbench, :authors_file, :silent
 
   def self.run(argv)
