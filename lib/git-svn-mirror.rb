@@ -5,13 +5,14 @@ class GitSVNMirror
   def self.run(argv)
     mirror = new
     mirror.silent = true # TODO: must be option
-    case argv.shift
-    when 'init'   then init(mirror, argv)
-    when 'update' then update(mirror, argv)
-    else
-      puts "Usage: git-svn-mirror [init|update]"
-    end
-    mirror
+    status = case argv.shift
+             when 'init'   then init(mirror, argv)
+             when 'update' then update(mirror, argv)
+             else
+               puts "Usage: git-svn-mirror [init|update]"
+               false
+             end
+    [mirror, status]
   end
 
   def self.init(mirror, argv)
@@ -27,10 +28,22 @@ class GitSVNMirror
     end
     opts.parse!(argv)
 
-    if mirror.from && mirror.to && mirror.workbench
-      mirror.init
+    if mirror.from && mirror.to
+      if !File.exist?(mirror.workbench)
+        puts "[!] Given workbench path does not exist."
+        false
+      else
+        if mirror.authors_file && !File.exist?(mirror.authors_file)
+          puts "[!] Given authors file does not exist."
+          false
+        else
+          mirror.init
+          true
+        end
+      end
     else
       puts opts
+      false
     end
   end
 
@@ -38,11 +51,13 @@ class GitSVNMirror
     if argv.empty? || argv.include?('--help')
       puts "Usage: git-svn-mirror update [workbench1] [workbench2] ..."
       puts "At least one workbench path is required."
+      false
     else
       argv.each do |workbench|
         mirror.workbench = workbench
         mirror.update
       end
+      true
     end
   end
 
@@ -86,6 +101,10 @@ class GitSVNMirror
 
   def workbench=(path)
     @workbench = File.expand_path(path)
+  end
+
+  def workbench
+    @workbench ||= Dir.pwd
   end
 
   def authors_file=(path)
