@@ -70,7 +70,7 @@ tool with the <tt>--silent</tt> option.
 
 ## License In Three Lines (LITL)
 
-  Copyright 2010 Eloy Duran <eloy.de.enige@gmail.com>
+  © Eloy Duran <eloy.de.enige@gmail.com>
   You may use these works, 'as is', for anything.
   If you include this plus copyright notice.
   But without warranty.
