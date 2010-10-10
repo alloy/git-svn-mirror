@@ -1,7 +1,7 @@
 require File.expand_path("../spec_helper", __FILE__)
 
 relative_path = WORKBENCH_REPO[Dir.pwd.size+1..-1]
-INIT_ARGS_WITHOUT_AUTHORS = %W{ init --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{relative_path} }
+INIT_ARGS_WITHOUT_AUTHORS = %W{ init -s --from=file://#{SVN_REPO} --to=#{GIT_REPO} --workbench=#{relative_path} }
 
 relative_path = AUTHORS_FILE[Dir.pwd.size+1..-1]
 INIT_ARGS_WITH_AUTHORS = INIT_ARGS_WITHOUT_AUTHORS.dup
@@ -93,7 +93,7 @@ describe "GitSVNMirror" do
   describe "concerning `update'" do
     def init_and_update(argv)
       GitSVNMirror.run(argv)
-      GitSVNMirror.run(%W{ update #{WORKBENCH_REPO} })
+      GitSVNMirror.run(%W{ update --silent #{WORKBENCH_REPO} })
     end
 
     it "updates the authors from the optional authors file" do
@@ -107,7 +107,7 @@ describe "GitSVNMirror" do
       clean!
       GitSVNMirror.run(INIT_ARGS_WITHOUT_AUTHORS.dup)
       Dir.chdir(WORKBENCH_REPO) do
-        _, status = GitSVNMirror.run(%w{ update })
+        _, status = GitSVNMirror.run(%w{ update --silent })
         status.should == true
       end
       checkout "trunk"

@@ -1,10 +1,10 @@
+require 'optparse'
 
 class GitSVNMirror
   attr_accessor :from, :to, :workbench, :authors_file, :silent
 
   def self.run(argv)
     mirror = new
-    mirror.silent = true # TODO: must be option
     status = case argv.shift
              when 'init'   then init(mirror, argv)
              when 'update' then update(mirror, argv)
@@ -15,18 +15,24 @@ class GitSVNMirror
     [mirror, status]
   end
 
-  def self.init(mirror, argv)
-    require 'optparse'
-
+  def self.option_parser(mirror, argv)
     opts = OptionParser.new do |o|
-      o.banner = "Usage: git-svn-mirror init [mandatory options]"
+      yield(o)
+      o.on('-s', '--silent', 'Silent mode.') { mirror.silent = true }
+    end
+    opts.parse!(argv)
+    opts
+  end
+
+  def self.init(mirror, argv)
+    opts = option_parser(mirror, argv) do |o|
+      o.banner = "Usage: git-svn-mirror init [mandatory options] [options]"
       o.separator "\n  Mandatory options are --from and --to.\n\n"
       o.on('--from URI',          'The location of the SVN repository that is to be mirrored.')                  { |uri| mirror.from = uri }
       o.on('--to URI',            'The location of the GIT repository that is the mirror.')                      { |uri| mirror.to = uri }
       o.on('--workbench PATH',    'The location of the workbench repository. Defaults to the current work dir.') { |wb|  mirror.workbench = wb }
       o.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT\'s format.')    { |af|  mirror.authors_file = af }
     end
-    opts.parse!(argv)
 
     if mirror.from && mirror.to
       if !File.exist?(mirror.workbench)
@@ -48,21 +54,20 @@ class GitSVNMirror
   end
 
   def self.update(mirror, argv)
-    if argv.include?('--help')
-      puts "Usage: git-svn-mirror update [workbench1] [workbench2] ..."
-      puts "Defaults to the current work dir if none is given."
-      false
-    else
-      if argv.empty?
-        mirror.update
-      else
-        argv.each do |workbench|
-          mirror.workbench = workbench
-          mirror.update
-        end
-      end
-      true
+    opts = option_parser(mirror, argv) do |o|
+      o.banner = "Usage: git-svn-mirror update [options] [workbench1] [workbench2] ..."
+      o.separator "\nDefaults to the current work dir if none is given.\n\n"
     end
+
+    if argv.empty?
+      mirror.update
+    else
+      argv.each do |workbench|
+        mirror.workbench = workbench
+        mirror.update
+      end
+    end
+    true
   end
 
   def init
