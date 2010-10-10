@@ -1,10 +1,10 @@
 git-svn-mirror
 --------------
 
-A command-line tool that automates the task of creating a GIT mirror of a SVN
+A command-line tool that automates the task of creating a GIT mirror for a SVN
 repo, and keeping it up-to-date.
 
-install
+Install
 -------
 
 This tool is packaged as a Ruby Gem, install it by running the following:
@@ -15,6 +15,8 @@ Configure the ‘workbench’
 -------------------------
 
 To mirror a SVN repo, first the local ‘workbench’ repo has to be configured.
+This ‘workbench’ is the GIT repo where the SVN revisions will be stored and
+from where these revisions will be pushed to the remote mirror GIT repo.
 
 Start by creating the directory:
 
@@ -31,9 +33,9 @@ GIT garbage collector.
 
 It can often be handy to supply an authors file, with the <tt>--authors-file</tt>
 option, which is used to migrate user names to GIT names and email addresses.
+The entries in this file should look like:
 
-You can optionally specify the path to the ‘workbench’ repo with the
-<tt>--workbench</tt> option.
+	svn-user-name = User Name <user@example.com>
 
 Update mirror
 -------------
