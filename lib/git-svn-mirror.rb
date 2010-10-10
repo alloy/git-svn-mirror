@@ -71,7 +71,7 @@ class GitSVNMirror
   end
 
   def init
-    log "* Creating mirror workbench at `#{workbench}'"
+    log "* Configuring mirror workbench at `#{workbench}'"
     sh "git init --bare"
 
     sh "git svn init --stdlayout --prefix=svn/ #{from}"
@@ -83,6 +83,11 @@ class GitSVNMirror
     fetch
     log "* Running garbage collection"
     sh "git gc"
+
+    log "The mirror workbench has been configured. To push to the remote GIT repo,",
+        "and possibly as a cron job, run the following command:",
+        "",
+        "  $ git-svn-mirror update '#{workbench}'"
   end
 
   def update
@@ -120,15 +125,20 @@ class GitSVNMirror
     @authors_file = File.expand_path(path)
   end
 
-  def log(str)
-    puts(str) unless @silent
+  def log(*str)
+    puts("\n#{str.join("\n")}\n\n") unless @silent
   end
 
   def config(key)
-    sh("git config --get #{key}", false)
+    value = sh("git config --get #{key}", true)
+    value unless value.empty?
   end
 
-  def sh(command, silent = @silent)
-    Dir.chdir(workbench) { `env GIT_DIR='#{workbench}' #{command}#{ ' > /dev/null 2>&1' if silent }`.strip }
+  def sh(command, capture = false)
+    Dir.chdir(workbench) do
+      command = "env GIT_DIR='#{workbench}' #{command}"
+      command += (@silent ? " > /dev/null 2>&1" : " 1>&2") unless capture
+      `#{command}`.strip
+    end
   end
 end

@@ -1,3 +1,4 @@
 require 'git-svn-mirror'
 
-exit(1) unless GitSVNMirror.run(ARGV)
+_, success = GitSVNMirror.run(ARGV)
+exit(1) unless success
