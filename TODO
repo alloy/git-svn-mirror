@@ -1,0 +1,2 @@
+* error checking and reporting
+* optimize by not trying to push if there were no updates
