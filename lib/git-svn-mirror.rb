@@ -47,13 +47,13 @@ class GitSVNMirror
   end
 
   def init
-    log "* Creating mirror workbench at `#{@workbench}'"
+    log "* Creating mirror workbench at `#{workbench}'"
     sh "git init --bare"
 
-    sh "git svn init --stdlayout --prefix=svn/ #{@from}"
-    sh "git config --add svn-remote.svn.authorsfile '#{@authors_file}'" if @authors_file
+    sh "git svn init --stdlayout --prefix=svn/ #{from}"
+    sh "git config --add svn-remote.svn.authorsfile '#{authors_file}'" if authors_file
 
-    sh "git remote add origin #{@to}"
+    sh "git remote add origin #{to}"
     sh "git config --add remote.origin.push 'refs/remotes/svn/*:refs/heads/*'"
 
     fetch
@@ -84,6 +84,10 @@ class GitSVNMirror
     @to ||= config("remote.origin.url")
   end
 
+  def workbench=(path)
+    @workbench = File.expand_path(path)
+  end
+
   def log(str)
     puts(str) unless @silent
   end
@@ -92,7 +96,7 @@ class GitSVNMirror
     sh("git config --get #{key}", false)
   end
 
-  def sh(command, silent = true)
+  def sh(command, silent = @silent)
     Dir.chdir(@workbench) { `env GIT_DIR='#{@workbench}' #{command}#{ ' > /dev/null 2>&1' if silent }`.strip }
   end
 end
