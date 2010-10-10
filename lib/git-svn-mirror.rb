@@ -7,6 +7,8 @@ class GitSVNMirror
     case argv.shift
     when 'init'   then init(mirror, argv)
     when 'update' then update(mirror, argv)
+    else
+      puts "Usage: git-svn-mirror [init|update]"
     end
     mirror
   end
@@ -34,7 +36,7 @@ class GitSVNMirror
   def self.update(mirror, argv)
     if argv.empty? || argv.include?('--help')
       puts "Usage: git-svn-mirror update [workbench1] [workbench2] ..."
-      puts "\n  At least one workbench path is required."
+      puts "At least one workbench path is required."
     else
       argv.each do |workbench|
         mirror.workbench = workbench
