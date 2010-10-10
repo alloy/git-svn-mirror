@@ -1,17 +1,18 @@
-# git-svn-mirror
+git-svn-mirror
+--------------
 
 A command-line tool that automates the task of creating a GIT mirror of a SVN
 repo, and keeping it up-to-date.
 
-## install
+install
+-------
 
 This tool is packaged as a Ruby Gem, install it by running the following:
 
 	$ gem install git-svn-mirror
 
-## Usage
-
-### Configure the mirror workbench
+Configure the ‘workbench’
+-------------------------
 
 To mirror a SVN repo, first the local ‘workbench’ repo has to be configured.
 
@@ -28,10 +29,14 @@ This will create a ‘bare’ GIT repo, configure the SVN and GIT remotes, fetch
 the revisions from the SVN remote, and compact the ‘workbench’ by running the
 GIT garbage collector.
 
-It can often be handy to supply an authors file which is used to migrate user
-names to GIT names and email addresses. See the <tt>--authors-file</tt> option.
+It can often be handy to supply an authors file, with the <tt>--authors-file</tt>
+option, which is used to migrate user names to GIT names and email addresses.
 
-### Update mirror
+You can optionally specify the path to the ‘workbench’ repo with the
+<tt>--workbench</tt> option.
+
+Update mirror
+-------------
 
 To push the latest changes from the SVN repo to the GIT repo, run the following
 command from the ‘workbench’ repo:
@@ -46,9 +51,8 @@ You will probably normally not want to perform this step by hand. You can solve
 this by adding this command as a cron job, in which case you can silence the
 tool with the <tt>--silent</tt> option.
 
-## Help banners
-
-### init
+‘init’ help banner
+----------------
 
 	Usage: git-svn-mirror init [mandatory options] [options]
 	
@@ -60,7 +64,8 @@ tool with the <tt>--silent</tt> option.
 	    --authors-file PATH          An optional authors file used to migrate SVN usernames to GIT's format.
 	-s, --silent                     Silent mode.
 
-### update
+‘update’ help banner
+--------------------
 
 	Usage: git-svn-mirror update [options] [workbench1] [workbench2] ...
 	
@@ -68,9 +73,24 @@ tool with the <tt>--silent</tt> option.
 	
 	-s, --silent                     Silent mode.
 
-## License In Three Lines (LITL)
+Contributing
+------------
+
+Once you've made your great commits:
+
+1. [Fork][fk] git-svn-mirror
+2. Create a topic branch - `git checkout -b my_branch`
+3. Push to your branch - `git push origin my_branch`
+4. Create an [Issue][is] with a link to your branch
+5. That’s it!
+
+License In Three Lines (LITL)
+-----------------------------
 
 	© Eloy Duran <eloy.de.enige@gmail.com>
 	You may use these works, ‘as is’, for anything.
 	If you include this plus copyright notice.
 	But without warranty.
+
+[fk]: http://help.github.com/forking/
+[is]: http://github.com/alloy/git-svn-mirror/issues
