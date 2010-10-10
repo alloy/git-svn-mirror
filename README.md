@@ -13,19 +13,19 @@ This tool is packaged as a Ruby Gem, install it by running the following:
 
 ### Configure the mirror workbench
 
-To mirror a SVN repo, first the local 'workbench' repo has to be configured.
+To mirror a SVN repo, first the local ‘workbench’ repo has to be configured.
 
 Start by creating the directory:
 
 	$ mkdir -p /path/to/workbench
 
-Then initialize the 'workbench':
+Then initialize the ‘workbench’:
 
 	$ cd /path/to/workbench
 	$ git-svn-mirror init --from=http://svn-host/repo_root --to=git@git-host:user/mirror.git
 
-This will create a 'bare' GIT repo, configure the SVN and GIT remotes, fetch
-the revisions from the SVN remote, and compact the 'workbench' by running the
+This will create a ‘bare’ GIT repo, configure the SVN and GIT remotes, fetch
+the revisions from the SVN remote, and compact the ‘workbench’ by running the
 GIT garbage collector.
 
 It can often be handy to supply an authors file which is used to migrate user
@@ -34,11 +34,11 @@ names to GIT names and email addresses. See the <tt>--authors-file</tt> option.
 ### Update mirror
 
 To push the latest changes from the SVN repo to the GIT repo, run the following
-command from the 'workbench' repo:
+command from the ‘workbench’ repo:
 
 	$ git-svn-mirror update
 
-Or by specifying the path(s) to one or more 'workbench' repos:
+Or by specifying the path(s) to one or more ‘workbench’ repos:
 
 	$ git-svn-mirror update /path/to/workbench1 /path/to/workbench2
 
@@ -71,6 +71,6 @@ tool with the <tt>--silent</tt> option.
 ## License In Three Lines (LITL)
 
 	© Eloy Duran <eloy.de.enige@gmail.com>
-	You may use these works, 'as is', for anything.
+	You may use these works, ‘as is’, for anything.
 	If you include this plus copyright notice.
 	But without warranty.
