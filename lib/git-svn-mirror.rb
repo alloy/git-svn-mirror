@@ -20,7 +20,8 @@ class GitSVNMirror
   def self.option_parser(mirror, argv)
     opts = OptionParser.new do |o|
       yield(o)
-      o.on('-s', '--silent', 'Silent mode.') { mirror.silent = true }
+      o.on('-s', '--silent',  'Silent mode.')       { mirror.silent = true }
+      o.on('-v', '--version', 'Print the version.') { puts VERSION; exit }
     end
     opts.parse!(argv)
     opts
