@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Eloy Duran"]
-  s.date = %q{2010-10-10}
+  s.date = %q{2010-10-11}
   s.default_executable = %q{git-svn-mirror}
   s.description = %q{A command-line tool that automates the task of creating a GIT mirror for a SVN repo, and keeping it up-to-date.}
   s.email = %q{eloy.de.enige@gmail.com}
@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
   s.files = [
     "LICENSE",
      "README.md",
-     "Rakefile",
      "TODO",
      "bin/git-svn-mirror",
      "git-svn-mirror.gemspec",
