@@ -56,7 +56,7 @@ class GitSVNMirror
   def self.update(mirror, argv)
     opts = option_parser(mirror, argv) do |o|
       o.banner = "Usage: git-svn-mirror update [options] [workbench1] [workbench2] ..."
-      o.separator "\nDefaults to the current work dir if none is given.\n\n"
+      o.separator "\n  Defaults to the current work dir if none is given.\n\n"
     end
 
     if argv.empty?
