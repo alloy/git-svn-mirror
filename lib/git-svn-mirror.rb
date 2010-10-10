@@ -7,13 +7,16 @@ class GitSVNMirror
     OptionParser.new do |opt|
       opt.on('--from URI', 'The location of the SVN repository that is to be mirrored.') { |uri| @from = uri }
       opt.on('--to URI',   'The location of the GIT repository that is the mirror.')     { |uri| @to = uri }
+      opt.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT’s format') { |af| @authors_file = af }
     end.parse!(argv)
 
     @workbench = argv.shift
 
     sh "git init --bare"
     sh "git svn init --stdlayout --prefix=svn/ #{@from}"
+    sh "git config --add svn-remote.svn.authorsfile '#{@authors_file}'" if @authors_file
     sh "git remote add origin #{@to}"
+    sh "git config --add remote.origin.push 'refs/remotes/svn/*:refs/heads/*'"
 
     fetch
     sh "git gc"
@@ -29,11 +32,7 @@ class GitSVNMirror
   end
 
   def push
-    sh "git push origin 'refs/remotes/svn/*:refs/heads/*'"
-  end
-
-  def svn_repo_name
-    File.basename(@from)
+    sh "git push origin"
   end
 
   def sh(command)

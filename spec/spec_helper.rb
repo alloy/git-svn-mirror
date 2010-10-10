@@ -11,6 +11,8 @@ def clean!
   FileUtils.rm_rf(TMP)
   FileUtils.mkdir_p(TMP)
 
+  FileUtils.mkdir_p(WORKBENCH_REPO)
+
   # create empty git repo
   FileUtils.mkdir_p(GIT_REPO)
   Dir.chdir(GIT_REPO) { system "git init > /dev/null 2>&1" }
@@ -19,7 +21,7 @@ end
 def sh(dir, command)
   result = ""
   Dir.chdir(dir) { result = `#{command}` }
-  result
+  result.strip
 end
 
 def checkout(branch)
@@ -28,6 +30,10 @@ end
 
 def entries
   Dir.entries(GIT_REPO).reject { |x| x[0,1] == '.' }
+end
+
+def config(key)
+  sh WORKBENCH_REPO, "git config --get #{key}"
 end
 
 TMP = File.expand_path('../tmp', __FILE__)

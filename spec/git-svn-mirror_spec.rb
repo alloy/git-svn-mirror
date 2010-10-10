@@ -21,9 +21,8 @@ describe "GitSVNMirror" do
   before do
     unless @mirror
       clean!
-      FileUtils.mkdir_p(WORKBENCH_REPO)
       @mirror = GitSVNMirror.new
-      @mirror.init(%W{ --from=file://#{SVN_REPO} --to=#{GIT_REPO} #{WORKBENCH_REPO}})
+      @mirror.init(%W{ --from=file://#{SVN_REPO} --to=#{GIT_REPO} #{WORKBENCH_REPO} })
     end
   end
 
@@ -34,13 +33,32 @@ describe "GitSVNMirror" do
       @mirror.workbench.should == WORKBENCH_REPO
     end
 
-    it "returns the name of the SVN repo" do
-      @mirror.svn_repo_name.should == File.basename(SVN_REPO)
+    #it "initializes the workbench repo" do
+      #config = File.read(File.join(WORKBENCH_REPO, 'config'))
+      #config.should == EXPECTED_CONFIG
+    #end
+
+    it "creates a bare workbench repo" do
+      config("core.bare").should == "true"
     end
 
-    it "initializes the workbench repo" do
-      config = File.read(File.join(WORKBENCH_REPO, 'config'))
-      config.should == EXPECTED_CONFIG
+    it "adds an authors file config entry if one is given" do
+      config("svn-remote.svn.authorsfile").should.be.empty
+      clean!
+      @mirror.init(%W{ --authors-file='authors.txt' --from=file://#{SVN_REPO} --to=#{GIT_REPO} #{WORKBENCH_REPO} })
+      config("svn-remote.svn.authorsfile").should == "authors.txt"
+    end
+
+    it "configures the SVN remote to fetch trunk, branches, and tags" do
+      config("svn-remote.svn.url").should == "file://#{SVN_REPO}"
+      config("svn-remote.svn.fetch").should == "trunk:refs/remotes/svn/trunk"
+      config("svn-remote.svn.branches").should == "branches/*:refs/remotes/svn/*"
+      config("svn-remote.svn.tags").should == "tags/*:refs/remotes/svn/tags/*"
+    end
+
+    it "configures the GIT remote" do
+      config("remote.origin.url").should == GIT_REPO
+      config("remote.origin.push").should == "refs/remotes/svn/*:refs/heads/*"
     end
 
     it "performs a fetch afterwards, but does not push yet" do
