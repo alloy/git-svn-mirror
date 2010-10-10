@@ -20,11 +20,11 @@ class GitSVNMirror
 
     opts = OptionParser.new do |o|
       o.banner = "Usage: git-svn-mirror init [mandatory options]"
-      o.separator "\n  Mandatory options are --from, --to, and --workbench.\n\n"
-      o.on('--from URI',          'The location of the SVN repository that is to be mirrored.')                    { |uri| mirror.from = uri }
-      o.on('--to URI',            'The location of the GIT repository that is the mirror.')                        { |uri| mirror.to = uri }
-      o.on('--workbench PATH',    'The location of the workbench repository from where the mirroring will occur.') { |wb|  mirror.workbench = wb }
-      o.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT\'s format.')      { |af|  mirror.authors_file = af }
+      o.separator "\n  Mandatory options are --from and --to.\n\n"
+      o.on('--from URI',          'The location of the SVN repository that is to be mirrored.')                  { |uri| mirror.from = uri }
+      o.on('--to URI',            'The location of the GIT repository that is the mirror.')                      { |uri| mirror.to = uri }
+      o.on('--workbench PATH',    'The location of the workbench repository. Defaults to the current work dir.') { |wb|  mirror.workbench = wb }
+      o.on('--authors-file PATH', 'An optional authors file used to migrate SVN usernames to GIT\'s format.')    { |af|  mirror.authors_file = af }
     end
     opts.parse!(argv)
 
