@@ -1,22 +1,5 @@
 require File.expand_path("../spec_helper", __FILE__)
 
-EXPECTED_CONFIG = <<EOS
-[core]
-	repositoryformatversion = 0
-	filemode = true
-	bare = true
-	ignorecase = true
-	autocrlf = false
-[svn-remote "svn"]
-	url = file://#{SVN_REPO}
-	fetch = trunk:refs/remotes/svn/trunk
-	branches = branches/*:refs/remotes/svn/*
-	tags = tags/*:refs/remotes/svn/tags/*
-[remote "origin"]
-	url = #{GIT_REPO}
-	fetch = +refs/heads/*:refs/remotes/origin/*
-EOS
-
 describe "GitSVNMirror" do
   before do
     unless @mirror
@@ -32,11 +15,6 @@ describe "GitSVNMirror" do
       @mirror.to.should == GIT_REPO
       @mirror.workbench.should == WORKBENCH_REPO
     end
-
-    #it "initializes the workbench repo" do
-      #config = File.read(File.join(WORKBENCH_REPO, 'config'))
-      #config.should == EXPECTED_CONFIG
-    #end
 
     it "creates a bare workbench repo" do
       config("core.bare").should == "true"
