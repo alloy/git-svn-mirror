@@ -103,6 +103,17 @@ describe "GitSVNMirror" do
       author_and_email.should == 'Eloy Duran <eloy.de.enige@gmail.com>'
     end
 
+    it "defaults to the current work dir" do
+      clean!
+      GitSVNMirror.run(INIT_ARGS_WITHOUT_AUTHORS.dup)
+      Dir.chdir(WORKBENCH_REPO) do
+        _, status = GitSVNMirror.run(%w{ update })
+        status.should == true
+      end
+      checkout "trunk"
+      entries.should == %w{ file.txt file2.txt }
+    end
+
     # only once for the remaining specs
     before do
       unless @mirror

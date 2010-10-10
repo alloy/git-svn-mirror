@@ -48,14 +48,18 @@ class GitSVNMirror
   end
 
   def self.update(mirror, argv)
-    if argv.empty? || argv.include?('--help')
+    if argv.include?('--help')
       puts "Usage: git-svn-mirror update [workbench1] [workbench2] ..."
-      puts "At least one workbench path is required."
+      puts "Defaults to the current work dir if none is given."
       false
     else
-      argv.each do |workbench|
-        mirror.workbench = workbench
+      if argv.empty?
         mirror.update
+      else
+        argv.each do |workbench|
+          mirror.workbench = workbench
+          mirror.update
+        end
       end
       true
     end
@@ -120,6 +124,6 @@ class GitSVNMirror
   end
 
   def sh(command, silent = @silent)
-    Dir.chdir(@workbench) { `env GIT_DIR='#{@workbench}' #{command}#{ ' > /dev/null 2>&1' if silent }`.strip }
+    Dir.chdir(workbench) { `env GIT_DIR='#{workbench}' #{command}#{ ' > /dev/null 2>&1' if silent }`.strip }
   end
 end
