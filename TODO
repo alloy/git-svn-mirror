@@ -1,2 +1,3 @@
+* crap, it seems that update with multiple workbench paths doesn't work... that's what you get for not adding tests for this use case.
 * error checking and reporting
 * optimize by not trying to push if there were no updates
