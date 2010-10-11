@@ -90,9 +90,8 @@ License In Three Lines (LITL)
 -----------------------------
 
 	© Eloy Duran <eloy.de.enige@gmail.com>
-	You may use these works, ‘as is’, for anything.
-	If you include this plus copyright notice.
-	But without warranty.
+	You may use these works without restrictions. As long as this paragraph is
+	included. The work is provided “as is”, without warranty of any kind.
 
 [fk]: http://help.github.com/forking/
 [is]: http://github.com/alloy/git-svn-mirror/issues
