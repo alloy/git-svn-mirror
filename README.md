@@ -4,6 +4,13 @@ git-svn-mirror
 A command-line tool that automates the task of creating a GIT mirror for a SVN
 repo, and keeping it up-to-date.
 
+Why
+---
+
+Figuring this stuff out is a pain in the bum, in my opinion, and its probably
+not even done yet. So please do contribute! Also, if I would keep doing this by
+hand, I would forget how to do it, a few weeks down the line.
+
 Install
 -------
 
